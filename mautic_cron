@@ -1,0 +1,15 @@
+SHELL=/bin/bash
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+BASH_ENV=/tmp/cron.env
+
+# Upstream's schedule: segments, then campaigns, then campaign events.
+0,15,30,45 * * * * php /var/www/html/bin/console mautic:segments:update 2>&1 | tee /tmp/stdout
+5,20,35,50 * * * * php /var/www/html/bin/console mautic:campaigns:update 2>&1 | tee /tmp/stdout
+10,25,40,55 * * * * php /var/www/html/bin/console mautic:campaigns:trigger 2>&1 | tee /tmp/stdout
+
+# Not in upstream's defaults: scheduled segment emails, imports and exports
+# that run in the background, and scheduled reports.
+2,17,32,47 * * * * php /var/www/html/bin/console mautic:broadcasts:send 2>&1 | tee /tmp/stdout
+*/5 * * * * php /var/www/html/bin/console mautic:import 2>&1 | tee /tmp/stdout
+7,22,37,52 * * * * php /var/www/html/bin/console mautic:contacts:scheduled_export 2>&1 | tee /tmp/stdout
+12 * * * * php /var/www/html/bin/console mautic:reports:scheduler 2>&1 | tee /tmp/stdout

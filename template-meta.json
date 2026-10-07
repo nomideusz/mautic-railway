@@ -1,0 +1,9 @@
+{
+  "name": "Mautic Production | Open-Source Marketing Automation, HubSpot Alternative",
+  "short_name": "Mautic Production",
+  "description": "Marketing automation with the cron and workers that make campaigns fire",
+  "category": "Automation",
+  "image": "https://cdn.jsdelivr.net/gh/nomideusz/mautic-railway/icon.svg",
+  "card_desc": "Email campaigns, segments and lead scoring, with the cron jobs and queue workers that actually send them.",
+  "deploy_marker": "nomideusz/mautic-railway"
+}

@@ -1,0 +1,144 @@
+{
+  "services": {
+    "0a9f9bd3-4ac9-4530-ab16-57ac127a3f21": {
+      "icon": "https://cdn.jsdelivr.net/gh/nomideusz/mautic-railway/icon.svg",
+      "name": "Mautic",
+      "build": {},
+      "deploy": {
+        "startCommand": null,
+        "healthcheckPath": "/s/login",
+        "restartPolicyType": "ALWAYS",
+        "restartPolicyMaxRetries": 10
+      },
+      "source": {
+        "repo": "https://github.com/nomideusz/mautic-railway"
+      },
+      "networking": {
+        "serviceDomains": {
+          "<hasDomain>": {}
+        }
+      },
+      "volumeMounts": {
+        "8fcaaa3a-a831-4b93-b40d-8a96e12e19e1": {
+          "mountPath": "/data"
+        }
+      },
+      "variables": {
+        "PORT": {
+          "defaultValue": "80",
+          "description": "Port Apache listens on - leave as is",
+          "isOptional": false
+        },
+        "RAILWAY_HEALTHCHECK_TIMEOUT_SEC": {
+          "defaultValue": "600",
+          "description": "First boot installs Mautic before the login page answers",
+          "isOptional": false
+        },
+        "RAILWAY_DEPLOYMENT_DRAINING_SECONDS": {
+          "defaultValue": "30",
+          "description": "Lets the queue workers finish the message they are sending on redeploy",
+          "isOptional": false
+        },
+        "MAUTIC_ADMIN_EMAIL": {
+          "defaultValue": "",
+          "description": "Your email - the admin account is created with it on first boot",
+          "isOptional": false
+        },
+        "MAUTIC_ADMIN_PASSWORD": {
+          "defaultValue": "${{secret(24, \"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789\")}}",
+          "description": "Admin password (username admin, or sign in with your email). Change it after first login",
+          "isOptional": false
+        },
+        "MAUTIC_URL": {
+          "defaultValue": "https://${{RAILWAY_PUBLIC_DOMAIN}}",
+          "description": "Site URL written at install. For a custom domain later, change it under Settings > Configuration",
+          "isOptional": false
+        },
+        "MAUTIC_DB_HOST": {
+          "defaultValue": "${{MySQL.RAILWAY_PRIVATE_DOMAIN}}",
+          "description": "MySQL host on the private network",
+          "isOptional": false
+        },
+        "MAUTIC_DB_PORT": {
+          "defaultValue": "3306",
+          "description": "MySQL port",
+          "isOptional": false
+        },
+        "MAUTIC_DB_DATABASE": {
+          "defaultValue": "${{MySQL.MYSQL_DATABASE}}",
+          "description": "MySQL database",
+          "isOptional": false
+        },
+        "MAUTIC_DB_USER": {
+          "defaultValue": "${{MySQL.MYSQL_USER}}",
+          "description": "MySQL user",
+          "isOptional": false
+        },
+        "MAUTIC_DB_PASSWORD": {
+          "defaultValue": "${{MySQL.MYSQL_PASSWORD}}",
+          "description": "MySQL password",
+          "isOptional": false
+        },
+        "MAUTIC_MESSENGER_DSN_EMAIL": {
+          "defaultValue": "doctrine://default",
+          "description": "Email queue, consumed by the worker in this container",
+          "isOptional": false
+        },
+        "MAUTIC_MESSENGER_DSN_HIT": {
+          "defaultValue": "doctrine://default",
+          "description": "Page-hit and email-open queue, consumed by the worker in this container",
+          "isOptional": false
+        }
+      }
+    },
+    "7cbc9525-46b3-442b-90c7-9f01192dc288": {
+      "icon": "https://devicons.railway.app/i/mysql.svg",
+      "name": "MySQL",
+      "build": {},
+      "deploy": {
+        "startCommand": "docker-entrypoint.sh mysqld --datadir=/var/lib/mysql/data --performance-schema=OFF",
+        "healthcheckPath": null,
+        "restartPolicyType": "ON_FAILURE",
+        "restartPolicyMaxRetries": 10
+      },
+      "source": {
+        "image": "mysql:8.4.11"
+      },
+      "networking": {
+        "serviceDomains": {}
+      },
+      "volumeMounts": {
+        "ec90f090-128b-40cd-95d5-b453002e457e": {
+          "mountPath": "/var/lib/mysql"
+        }
+      },
+      "variables": {
+        "MYSQL_DATABASE": {
+          "defaultValue": "mautic",
+          "description": "Database name",
+          "isOptional": false
+        },
+        "MYSQL_USER": {
+          "defaultValue": "mautic",
+          "description": "Database user",
+          "isOptional": false
+        },
+        "MYSQL_PASSWORD": {
+          "defaultValue": "${{secret(32, \"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789\")}}",
+          "description": "Auto-generated database password",
+          "isOptional": false
+        },
+        "MYSQL_ROOT_PASSWORD": {
+          "defaultValue": "${{secret(32, \"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789\")}}",
+          "description": "Auto-generated root password",
+          "isOptional": false
+        },
+        "RAILWAY_DEPLOYMENT_DRAINING_SECONDS": {
+          "defaultValue": "30",
+          "description": "Lets MySQL shut down cleanly on redeploy",
+          "isOptional": false
+        }
+      }
+    }
+  }
+}
