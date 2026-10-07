@@ -12,7 +12,7 @@ The stack is two services: Mautic and MySQL.
 - **Settings survive redeploys.** Mautic keeps everything you save under Settings, including your email credentials, in `config/local.php`. That file also holds the secret key that encrypts integration credentials. Here it lives on the Mautic volume, along with your uploaded images and files. Without a volume, both are lost on every redeploy.
 - **Sends without SMTP.** Railway blocks outbound SMTP below the Pro plan. The image adds the HTTPS API transports for Amazon SES, Brevo, Mailgun, Mailjet, Postmark, Resend and SendGrid, so Mautic sends on any plan.
 - **Installed for you.** The admin account is created on the first boot from the email you enter at deploy time. There is no install wizard, so nobody else can claim a freshly deployed instance.
-- **MySQL 8.4 LTS**, the database upstream's Docker setup uses. `performance_schema` is turned off, which saves about 300 MB of idle memory.
+- **MySQL 8.4 LTS**, the database upstream's Docker setup uses. `performance_schema` is turned off, which roughly halves MySQL's idle memory.
 
 ## Common Use Cases
 
@@ -68,7 +68,7 @@ A scheduled segment email goes to the contacts who were in the segment at its pu
 
 **Sending speed.** One worker consumes each queue. For large lists, set `DOCKER_MAUTIC_WORKERS_CONSUME_EMAIL` to `2` or more on the Mautic service.
 
-**Memory.** Expect about 400 MB at idle: roughly 200 MB for Mautic (Apache, cron and three workers) and 200 MB for MySQL. Hobby or above is recommended once you send to real lists.
+**Memory.** Expect about 700 MB: about 430 MB for Mautic (Apache, cron and three PHP workers), rising briefly while it sends, and about 285 MB for MySQL. Mautic alone can exceed the Trial plan's per-service limit, so deploy on Hobby or above.
 
 **Custom domains.** Add the domain under the Mautic service's Settings → Networking, then change the Site URL under Mautic's Settings → Configuration. `MAUTIC_URL` is only read at install.
 
