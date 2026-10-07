@@ -28,6 +28,11 @@ ENV DOCKER_MAUTIC_WORKERS_CONSUME_EMAIL=1 \
     DOCKER_MAUTIC_WORKERS_CONSUME_HIT=1 \
     DOCKER_MAUTIC_WORKERS_CONSUME_FAILED=1
 
+# Once site_url is https, Mautic makes every route https-only. Real traffic
+# carries X-Forwarded-Proto from Railway's proxy; the healthcheck doesn't, and a
+# 301 fails it. Mark its requests secure so it still checks the login page.
+RUN echo 'SetEnvIf User-Agent "^RailwayHealthCheck/" HTTPS=on' > /etc/apache2/conf-enabled/railway-healthcheck.conf
+
 COPY mautic_cron /templates/mautic_cron
 COPY supervisord-web-cron.conf /tmp/
 RUN cat /tmp/supervisord-web-cron.conf >> /etc/supervisor/conf.d/supervisord.conf && rm /tmp/supervisord-web-cron.conf
