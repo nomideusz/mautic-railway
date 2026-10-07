@@ -6,5 +6,6 @@
   "image": "https://cdn.jsdelivr.net/gh/nomideusz/mautic-railway/icon.svg",
   "card_desc": "Email campaigns, segments and lead scoring, with the cron jobs and queue workers that actually send them.",
   "deploy_marker": "nomideusz/mautic-railway",
-  "id": "7a297adc-387e-430a-ad99-f6f186725ff8"
+  "id": "7a297adc-387e-430a-ad99-f6f186725ff8",
+  "published": true
 }
