@@ -6,6 +6,11 @@
 # queued emails are never sent. supervisord (PID 1) runs and restarts all five.
 set -euo pipefail
 
+# Railway's image unpacking can restore files that a later layer deleted:
+# php:apache disables mpm_event that way, and Apache then refuses to start
+# ("More than one MPM loaded"). Locally the image is fine.
+rm -f /etc/apache2/mods-enabled/mpm_event.* /etc/apache2/mods-enabled/mpm_worker.*
+
 # Railway mounts the volume root-owned, with lost+found at the top. -n: seed
 # what's missing, never overwrite.
 cp -an /opt/volume-seed/. /data/
