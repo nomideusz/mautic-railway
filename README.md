@@ -31,7 +31,7 @@ The stack is two services: Mautic and MySQL.
 - [Mautic cron jobs](https://docs.mautic.org/en/latest/configuration/cron_jobs.html)
 - [Symfony Mailer third-party transports](https://symfony.com/doc/current/mailer.html#using-a-3rd-party-transport) (DSN formats)
 - [Mautic Docker image](https://github.com/mautic/docker-mautic)
-- [Template source on GitHub](https://github.com/nomideusz/mautic-railway)
+- [Template source on GitHub](https://github.com/two-workspaces/mautic)
 
 ### Implementation Details
 
